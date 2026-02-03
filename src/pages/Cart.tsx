@@ -36,17 +36,17 @@ const Cart = () => {
         <main className="flex-1 flex flex-col items-center justify-center p-6">
           <ShoppingBag className="w-24 h-24 text-muted-foreground mb-6" />
           <h1 className="text-2xl font-bold text-foreground mb-2">
-            {t("Your cart is empty", "သင့်စျေးခြင်းထဲမှာ ဘာမှမရှိပါ")}
+            {t("Your cart is empty", "သင့်စျေးခြင်းထဲမှာ ပစ္စည်းမရှိပါ")}
           </h1>
           <p className="text-muted-foreground mb-6 text-center">
             {t(
               "Add products to get started",
-              "ပစ္စည်းများထည့်၍ စတင်ပါ"
+              "စတင်ရန် ပစ္စည်းများ ထည့်ပါ"
             )}
           </p>
           <Link to="/products">
             <Button>
-              {t("Browse Products", "ပစ္စည်းများကြည့်ရန်")}
+              {t("Browse Products", "ထုတ်ကုန်များကြည့်ရန်")}
             </Button>
           </Link>
         </main>
@@ -102,22 +102,22 @@ const Cart = () => {
                       </h3>
 
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-muted-foreground mb-2">
-                        <span>{t("Cap Size", "ဆံ့")}:</span>
+                        <span>{t("Cap Size", "ကတ်တစ်ခုအဖုံးအရေအတွက်")}:</span>
                         <span className="font-medium text-foreground">
-                          {formatPrice(item.capSize)} ဆံ့
+                          {formatPrice(item.capSize)} အဖုံး
                         </span>
 
-                        <span>{t("Cards", "ကဒ်")}:</span>
+                        <span>{t("Cards", "ကတ်")}:</span>
                         <span className="font-medium text-foreground">
-                          {item.cardQuantity} ကဒ်
+                          {item.cardQuantity} ကတ်
                         </span>
 
-                        <span>{t("Total Caps", "စုစုပေါင်း ဆံ့")}:</span>
+                        <span>{t("Total Caps", "စုစုပေါင်း အဖုံး")}:</span>
                         <span className="font-medium text-foreground">
-                          {formatPrice(item.totalCaps)} ဆံ့
+                          {formatPrice(item.totalCaps)} အဖုံး
                         </span>
 
-                        <span>{t("Price/Cap", "၁ ဆံ့ စျေး")}:</span>
+                        <span>{t("Price/Cap", "အဖုံးတစ်ခုလျှင် စျေးနှုန်း")}:</span>
                         <span className="font-medium text-foreground">
                           {formatPrice(item.pricePerCap)} MMK
                         </span>
@@ -154,7 +154,7 @@ const Cart = () => {
             <div className="card-industrial p-6 mb-8">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-lg font-semibold text-foreground">
-                  {t("Grand Total", "စုစုပေါင်း")}
+                  {t("Grand Total", "စုစုပေါင်း စျေးနှုန်း")}
                 </span>
                 <span className="text-2xl font-bold text-primary">
                   {formatPrice(getGrandTotal())} MMK

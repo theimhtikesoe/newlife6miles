@@ -60,7 +60,7 @@ const Index = () => {
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 animate-slide-up" style={{ animationDelay: "100ms" }}>
               {t(
                 "Raw materials for clean plastic packaging.",
-                "သန့်ရှင်းသောရေ ထုပ်ပိုးခြင်းအတွက် ကုန်ကြမ်းများ။"
+                "သန့်ရှင်းသော ပလတ်စတစ်ထုပ်ပိုးရေးအတွက် ကုန်ကြမ်းများ။"
               )}
               <span className="block mt-1">
                 {t("Bottles begin here.", "ဘူးများ ဒီကနေ စတင်ပါသည်။")}

@@ -21,7 +21,7 @@ const OrderSuccess = () => {
 
           {/* Success Message */}
           <h1 className="text-3xl font-bold text-foreground mb-4">
-            {t("Order Received!", "အမှာစာ လက်ခံပြီး!")}
+            {t("Order Received!", "အမှာစာ လက်ခံပြီးပါပြီ!")}
           </h1>
 
           <p className="text-lg text-muted-foreground mb-8">

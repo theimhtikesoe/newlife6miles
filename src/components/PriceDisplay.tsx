@@ -21,14 +21,14 @@ const PriceDisplay = ({ pricePerBottle, pricePerCap, category, className = "" }:
     return new Intl.NumberFormat("my-MM").format(price);
   };
 
-  // For bottles: show price per bottle (၁ ဘူး စျေး)
-  // For caps: show price per cap (၁ ဖုံး စျေး)
+  // For bottles: show price per bottle (ဘူးတစ်လုံးလျှင် စျေးနှုန်း)
+  // For caps: show price per cap (အဖုံးတစ်ခုလျှင် စျေးနှုန်း)
   if (category === "caps") {
     if (!pricePerCap || pricePerCap <= 0) return null;
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <span className="text-sm text-muted-foreground">
-          {t("Price per cap", "၁ ဖုံး စျေး")}:
+          {t("Price per cap", "အဖုံးတစ်ခုလျှင် စျေးနှုန်း")}:
         </span>
         <span className="text-lg font-bold text-primary">
           {formatPrice(pricePerCap)} MMK
@@ -42,7 +42,7 @@ const PriceDisplay = ({ pricePerBottle, pricePerCap, category, className = "" }:
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <span className="text-sm text-muted-foreground">
-        {t("Price per bottle", "၁ ဘူး စျေး")}:
+        {t("Price per bottle", "ဘူးတစ်လုံးလျှင် စျေးနှုန်း")}:
       </span>
       <span className="text-lg font-bold text-primary">
         {formatPrice(pricePerBottle)} MMK

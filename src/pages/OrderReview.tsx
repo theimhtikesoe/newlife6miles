@@ -33,16 +33,16 @@ const OrderReview = () => {
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>{t("Back to Cart", "စျေးခြင်းသို့")}</span>
+              <span>{t("Back to Cart", "စျေးခြင်းသို့ ပြန်ရန်")}</span>
             </button>
 
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              {t("Order Review", "အမှာစာ ပြန်ကြည့်ရန်")}
+              {t("Order Review", "အမှာစာ စစ်ဆေးရန်")}
             </h1>
             <p className="text-muted-foreground mb-8">
               {t(
                 "Review your order before proceeding",
-                "ဆက်လက်မပြုမီ သင့်အမှာစာကို စစ်ဆေးပါ"
+                "ဆက်လက်မလုပ်မီ အမှာစာကို စစ်ဆေးပါ"
               )}
             </p>
 
@@ -72,11 +72,11 @@ const OrderReview = () => {
                           {item.productName}
                         </h3>
                         <div className="text-sm text-muted-foreground mt-1">
-                          {formatPrice(item.capSize)} ဆံ့ × {item.cardQuantity}{" "}
-                          ကဒ် = {formatPrice(item.totalCaps)} ဆံ့
+                          {formatPrice(item.capSize)} အဖုံး × {item.cardQuantity}{" "}
+                          ကတ် = {formatPrice(item.totalCaps)} အဖုံး
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          @ {formatPrice(item.pricePerCap)} MMK/ဆံ့
+                          @ {formatPrice(item.pricePerCap)} MMK/အဖုံး
                         </div>
                       </div>
                       <div className="text-right">
@@ -92,7 +92,7 @@ const OrderReview = () => {
               <div className="h-px bg-border my-4" />
 
               <div className="flex items-center justify-between text-lg font-bold">
-                <span>{t("Grand Total", "စုစုပေါင်း")}</span>
+                <span>{t("Grand Total", "စုစုပေါင်း စျေးနှုန်း")}</span>
                 <span className="text-primary">
                   {formatPrice(getGrandTotal())} MMK
                 </span>

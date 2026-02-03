@@ -30,13 +30,6 @@ interface AddToCartModalProps {
   editItem?: CartItem;
 }
 
-const CAP_SIZE_OPTIONS = [
-  { value: "100", label: "100 ဆံ့" },
-  { value: "200", label: "200 ဆံ့" },
-  { value: "400", label: "400 ဆံ့" },
-  { value: "custom", label: "Custom" },
-];
-
 const AddToCartModal = ({
   product,
   pricePerCap,
@@ -46,6 +39,12 @@ const AddToCartModal = ({
 }: AddToCartModalProps) => {
   const { t } = useLanguage();
   const { addItem, updateItem } = useCart();
+  const capSizeOptions = [
+    { value: "100", label: t("100 caps", "၁၀၀ အဖုံး") },
+    { value: "200", label: t("200 caps", "၂၀၀ အဖုံး") },
+    { value: "400", label: t("400 caps", "၄၀၀ အဖုံး") },
+    { value: "custom", label: t("Custom", "စိတ်ကြိုက်") },
+  ];
 
   const [capSizeOption, setCapSizeOption] = useState("100");
   const [customCapSize, setCustomCapSize] = useState("");
@@ -55,7 +54,7 @@ const AddToCartModal = ({
   useEffect(() => {
     if (isOpen) {
       if (editItem) {
-        const matchingOption = CAP_SIZE_OPTIONS.find(
+        const matchingOption = capSizeOptions.find(
           (opt) => opt.value === String(editItem.capSize)
         );
         if (matchingOption) {
@@ -98,7 +97,7 @@ const AddToCartModal = ({
         title: t("Invalid Input", "ထည့်သွင်းချက်မမှန်ပါ"),
         description: t(
           "Please check cap size and card quantity",
-          "ဆံ့နှင့် ကဒ်အရေအတွက်ကို စစ်ဆေးပါ"
+          "ကတ်တစ်ခုအဖုံးအရေအတွက်နှင့် ကတ်အရေအတွက်ကို စစ်ဆေးပါ"
         ),
         variant: "destructive",
       });
@@ -119,14 +118,14 @@ const AddToCartModal = ({
     if (editItem) {
       updateItem(editItem.id, itemData);
       toast({
-        title: t("Cart Updated", "စျေးခြင်းပြင်ဆင်ပြီး"),
-        description: t("Item updated in cart", "ပစ္စည်းကို ပြင်ဆင်ပြီးပါပြီ"),
+        title: t("Cart Updated", "စျေးခြင်းကို ပြင်ဆင်ပြီးပါပြီ"),
+        description: t("Item updated in cart", "စျေးခြင်းထဲက ပစ္စည်းကို ပြင်ဆင်ပြီးပါပြီ"),
       });
     } else {
       addItem(itemData);
       toast({
-        title: t("Added to Cart", "စျေးခြင်းထဲထည့်ပြီး"),
-        description: `${product.name} - ${totalCaps} ${t("caps", "ဆံ့")}`,
+        title: t("Added to Cart", "စျေးခြင်းထဲ ထည့်ပြီးပါပြီ"),
+        description: `${product.name} - ${totalCaps} ${t("caps", "အဖုံး")}`,
       });
     }
 
@@ -154,7 +153,7 @@ const AddToCartModal = ({
           <div className="p-4 bg-secondary rounded-lg border border-border">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
-                {t("Price per cap", "၁ ဆံ့ စျေး")}
+                {t("Price per cap", "အဖုံးတစ်ခုလျှင် စျေးနှုန်း")}
               </span>
               <span className="text-lg font-bold text-foreground">
                 {formatPrice(pricePerCap)} MMK
@@ -165,14 +164,14 @@ const AddToCartModal = ({
           {/* Cap Size Selection */}
           <div className="space-y-2">
             <Label htmlFor="cap-size">
-              {t("Cap Size", "ဆံ့")} <span className="text-destructive">*</span>
+              {t("Cap Size", "ကတ်တစ်ခုအဖုံးအရေအတွက်")} <span className="text-destructive">*</span>
             </Label>
             <Select value={capSizeOption} onValueChange={setCapSizeOption}>
               <SelectTrigger id="cap-size" className="bg-background">
-                <SelectValue placeholder={t("Select cap size", "ဆံ့ ရွေးပါ")} />
+                <SelectValue placeholder={t("Select cap size", "ကတ်တစ်ခုအဖုံးအရေအတွက် ရွေးပါ")} />
               </SelectTrigger>
               <SelectContent className="bg-background border border-border z-50">
-                {CAP_SIZE_OPTIONS.map((option) => (
+                {capSizeOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -183,7 +182,7 @@ const AddToCartModal = ({
             {capSizeOption === "custom" && (
               <div className="mt-2">
                 <Label htmlFor="custom-cap-size" className="text-sm">
-                  {t("Enter cap quantity", "ဆံ့ အရေအတွက် ထည့်ပါ")}
+                  {t("Enter cap quantity", "ကတ်တစ်ခုအဖုံးအရေအတွက် ထည့်ပါ")}
                 </Label>
                 <Input
                   id="custom-cap-size"
@@ -201,7 +200,7 @@ const AddToCartModal = ({
           {/* Card Quantity */}
           <div className="space-y-2">
             <Label htmlFor="card-quantity">
-              {t("Card Quantity", "ကဒ် အရေအတွက်")}{" "}
+              {t("Card Quantity", "ကတ်အရေအတွက်")}{" "}
               <span className="text-destructive">*</span>
             </Label>
             <Input
@@ -237,10 +236,10 @@ const AddToCartModal = ({
 
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">
-                {t("Total Caps", "စုစုပေါင်း ဆံ့")}
+                {t("Total Caps", "စုစုပေါင်း အဖုံး")}
               </span>
               <span className="font-bold text-foreground">
-                {formatPrice(totalCaps)} {t("caps", "ဆံ့")}
+                {formatPrice(totalCaps)} {t("caps", "အဖုံး")}
               </span>
             </div>
 
@@ -248,7 +247,7 @@ const AddToCartModal = ({
 
             <div className="flex items-center justify-between">
               <span className="font-semibold text-foreground">
-                {t("Total Price", "စုစုပေါင်း စျေး")}
+                {t("Total Price", "စုစုပေါင်း စျေးနှုန်း")}
               </span>
               <span className="text-xl font-bold text-primary">
                 {formatPrice(totalPrice)} MMK
@@ -264,8 +263,8 @@ const AddToCartModal = ({
           >
             <ShoppingCart className="w-5 h-5 mr-2" />
             {editItem
-              ? t("Update Cart", "စျေးခြင်းပြင်ဆင်ရန်")
-              : t("Add to Cart", "Add to Cart")}
+              ? t("Update Cart", "စျေးခြင်းကို ပြင်ဆင်ရန်")
+              : t("Add to Cart", "စျေးခြင်းထဲထည့်ရန်")}
           </Button>
         </div>
       </SheetContent>

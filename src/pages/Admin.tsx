@@ -182,7 +182,7 @@ const Admin = () => {
     if (formData.category === 'caps') {
       const validImages = (formData.images || []).filter(Boolean);
       if (validImages.length === 0) {
-        toast.error("အဖုံး အတွက် အနည်းဆုံး ပုံ ၁ ပုံ တင်ရန်လိုအပ်ပါသည်");
+        toast.error("အဖုံးအတွက် အနည်းဆုံး ပုံ ၁ ပုံ တင်ရန်လိုအပ်ပါသည်");
         return;
       }
     }
@@ -322,10 +322,10 @@ const Admin = () => {
         <>
           {/* Cap Specifications */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">အဖုံး အချက်အလက်များ</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">အဖုံးအချက်အလက်များ</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="cap_type" className="text-sm font-medium">အဖုံး အမျိုးအစား</Label>
+                <Label htmlFor="cap_type" className="text-sm font-medium">အဖုံးအမျိုးအစား</Label>
                 <Select
                   value={formData.cap_type || 'Normal'}
                   onValueChange={(value) => setFormData({ ...formData, cap_type: value })}
@@ -342,7 +342,7 @@ const Admin = () => {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cap_sizes" className="text-sm font-medium">အဖုံး အရွယ်အစားများ (comma ခြားပါ)</Label>
+                <Label htmlFor="cap_sizes" className="text-sm font-medium">အဖုံးအရွယ်အစားများ (comma ခြားပါ)</Label>
                 <Input
                   id="cap_sizes"
                   value={formData.cap_sizes?.join(", ") || ""}
@@ -402,7 +402,7 @@ const Admin = () => {
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">စျေးနှုန်း</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="price_per_cap" className="text-sm font-medium">၁ ဖုံး စျေး (MMK)</Label>
+                <Label htmlFor="price_per_cap" className="text-sm font-medium">အဖုံးတစ်ခုလျှင် စျေးနှုန်း (MMK)</Label>
                 <Input
                   id="price_per_cap"
                   type="number"
@@ -1059,7 +1059,7 @@ const Admin = () => {
                     <div className="flex gap-2 mb-2 text-xs">
                       {product.category === 'caps' && product.price_per_cap ? (
                         <span className="px-2 py-0.5 bg-primary/10 text-primary rounded">
-                          ၁ ဖုံး: {product.price_per_cap} MMK
+                          အဖုံးတစ်ခုလျှင်: {product.price_per_cap} MMK
                         </span>
                       ) : null}
                       {product.category !== 'caps' && product.price_per_bottle ? (

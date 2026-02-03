@@ -23,14 +23,14 @@ const Footer = () => {
             <p className="text-background/70 text-sm max-w-xs">
               {t(
                 "We shape what holds clean water.",
-                "သန့်ရှင်းသောရေကို ထိန်းသိမ်းမည့်အရာကို ကျွန်ုပ်တို့ဖန်တီးပါသည်။"
+                "သန့်ရှင်းသောရေကို ကိုင်ဆောင်မည့် ပစ္စည်းများကို ကျွန်ုပ်တို့ ဖန်တီးပါသည်။"
               )}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold">{t("Quick Links", "အမြန်လင့်များ")}</h4>
+            <h4 className="font-semibold">{t("Quick Links", "အမြန်လင့်ခ်များ")}</h4>
             <nav className="flex flex-col gap-2">
               <Link to="/" className="text-sm text-background/70 hover:text-background transition-colors">
                 {t("Home", "ပင်မ")}

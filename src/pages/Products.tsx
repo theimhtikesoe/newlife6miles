@@ -174,7 +174,7 @@ const Products = () => {
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 text-primary text-sm font-medium shrink-0">
                   <Shield className="w-4 h-4" />
                   <span className="hidden sm:inline">
-                    {t("Admin Mode", "Admin Mode")}
+                    {t("Admin Mode", "အက်ဒမင် မုဒ်")}
                   </span>
                 </div>
               )}
@@ -184,11 +184,11 @@ const Products = () => {
             {isAdmin && displayProducts && displayProducts.length > 1 && (
               <div className="mt-4 p-3 rounded-lg bg-muted/50 border border-border text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">
-                  {t("Drag & Drop:", "ဆွဲချလို့ရသည်:")}
+                  {t("Drag & Drop:", "ဆွဲပြီး စီစဉ်ရန်:")}
                 </span>{" "}
                 {t(
                   "Hover over cards and drag the handle to reorder products.",
-                  "ကတ်များပေါ် hover လုပ်ပြီး handle ကို ဆွဲ၍ စီစဉ်ပါ။"
+                  "ကတ်ပေါ်ကို တင်ပြီး လက်ကိုင်ကို ဆွဲကာ ထုတ်ကုန်များကို စီစဉ်ပါ။"
                 )}
               </div>
             )}
@@ -244,7 +244,7 @@ const Products = () => {
             ) : (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">
-                  {t("No products found in this category.", "ဤအမျိုးအစားတွင် ထုတ်ကုန်မတွေ့ပါ။")}
+                  {t("No products found in this category.", "ဤအမျိုးအစားတွင် ထုတ်ကုန်မရှိပါ။")}
                 </p>
               </div>
             )}

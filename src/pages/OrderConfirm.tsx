@@ -137,7 +137,7 @@ const OrderConfirm = () => {
                         {item.productName}
                       </span>
                       <div className="text-muted-foreground">
-                        {formatPrice(item.capSize)} ဆံ့ × {item.cardQuantity} ကဒ်
+                        {formatPrice(item.capSize)} အဖုံး × {item.cardQuantity} ကတ်
                       </div>
                     </div>
                     <span className="font-semibold">
@@ -150,7 +150,7 @@ const OrderConfirm = () => {
               <div className="h-px bg-border my-4" />
 
               <div className="flex items-center justify-between text-lg font-bold">
-                <span>{t("Grand Total", "စုစုပေါင်း")}</span>
+                <span>{t("Grand Total", "စုစုပေါင်း စျေးနှုန်း")}</span>
                 <span className="text-primary">
                   {formatPrice(getGrandTotal())} MMK
                 </span>
@@ -201,7 +201,7 @@ const OrderConfirm = () => {
               ) : (
                 <>
                   <CheckCircle className="w-5 h-5 mr-2" />
-                  {t("Confirm Order", "Confirm Order")}
+                  {t("Confirm Order", "အမှာစာ အတည်ပြုရန်")}
                 </>
               )}
             </Button>
