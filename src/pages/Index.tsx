@@ -12,10 +12,10 @@ const Index = () => {
   const features = [
     {
       icon: Package,
-      title: t("Quality Materials", "အရည်အသွေးမြင့် ပစ္စည်းများ"),
+      title: t("Quality Materials", "အရည်အသွေးမြင့် ကုန်ကြမ်းများ"),
       description: t(
         "Food-grade PET materials meeting international standards",
-        "နိုင်ငံတကာစံနှုန်းနှင့် ကိုက်ညီသော အစားအသောက်သုံး PET ပစ္စည်းများ"
+        "နိုင်ငံတကာစံနှုန်းနှင့် ကိုက်ညီသော Food‑grade PET ကုန်ကြမ်းများ"
       ),
     },
     {
@@ -28,10 +28,10 @@ const Index = () => {
     },
     {
       icon: Sparkles,
-      title: t("Clean Finish", "သန့်ရှင်းသော အချောသတ်"),
+      title: t("Clean Finish", "သန့်ရှင်းသပ်ရပ်သော အချောသတ်"),
       description: t(
         "Crystal clear bottles ready for clean water packaging",
-        "သန့်ရှင်းသောရေ ထုပ်ပိုးရန် အဆင်သင့်ဖြစ်သော ကြည်လင်သောဘူးများ"
+        "သန့်ရှင်းသောရေ ထုပ်ပိုးရန် အသင့်ရှိသော ကြည်လင်သပ်ရပ်သော ဘူးများ"
       ),
     },
   ];
@@ -60,17 +60,17 @@ const Index = () => {
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 animate-slide-up" style={{ animationDelay: "100ms" }}>
               {t(
                 "Raw materials for clean plastic packaging.",
-                "သန့်ရှင်းသော ပလတ်စတစ်ထုပ်ပိုးရေးအတွက် ကုန်ကြမ်းများ။"
+                "သန့်ရှင်းသော ပလတ်စတစ် ထုပ်ပိုးရေးအတွက် ကုန်ကြမ်းများ။"
               )}
               <span className="block mt-1">
-                {t("Bottles begin here.", "ဘူးများ ဒီကနေ စတင်ပါသည်။")}
+                {t("Bottles begin here.", "ဘူးထုတ်လုပ်မှု ဒီကနေ စတင်ပါသည်။")}
               </span>
             </p>
 
             {/* CTA */}
             <div className="animate-slide-up" style={{ animationDelay: "200ms" }}>
               <Link to="/products" className="btn-primary inline-flex items-center gap-2 group">
-                {t("View Product Range", "ထုတ်ကုန်များကို ကြည့်ရန်")}
+                {t("View Product Range", "ထုတ်ကုန်အမျိုးအစားများ ကြည့်ရန်")}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -110,7 +110,7 @@ const Index = () => {
             <p className="text-muted-foreground max-w-md mx-auto">
               {t(
                 "Everything you need to package clean water, from raw materials to finished components.",
-                "ကုန်ကြမ်းများမှ ပြီးစီးသောအစိတ်အပိုင်းများအထိ သန့်ရှင်းသောရေထုပ်ပိုးရန် လိုအပ်သမျှအားလုံး။"
+                "ကုန်ကြမ်းမှ စပြီး ပြီးစီးသော အစိတ်အပိုင်းများအထိ သန့်ရှင်းသောရေ ထုပ်ပိုးရန် လိုအပ်သမျှအားလုံး။"
               )}
             </p>
           </div>
@@ -127,7 +127,7 @@ const Index = () => {
       <section className="section-padding bg-foreground">
         <div className="container-narrow text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-background mb-4">
-            {t("Ready to see our products?", "ကျွန်ုပ်တို့၏ ထုတ်ကုန်များကို ကြည့်ရန် အဆင်သင့်ဖြစ်ပြီလား?")}
+            {t("Ready to see our products?", "ထုတ်ကုန်များကို ကြည့်ရန် အဆင်သင့်ဖြစ်ပြီလား?")}
           </h2>
           <p className="text-background/70 mb-8 max-w-md mx-auto">
             {t(
@@ -136,7 +136,7 @@ const Index = () => {
             )}
           </p>
           <Link to="/products" className="btn-primary inline-flex items-center gap-2 group">
-            {t("Browse All Products", "ထုတ်ကုန်အားလုံးကြည့်ရန်")}
+            {t("Browse All Products", "ထုတ်ကုန်အားလုံးကို ကြည့်ရန်")}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

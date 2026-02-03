@@ -62,7 +62,7 @@ const Footer = () => {
                 <span className="text-sm text-background/70">
                   {t(
                     "Contact our counter for pricing",
-                    "စျေးနှုန်းအတွက် ကောင်တာသို့ ဆက်သွယ်ပါ"
+                    "စျေးနှုန်းသိလိုပါက ကောင်တာသို့ ဆက်သွယ်ပါ"
                   )}
                 </span>
               </div>

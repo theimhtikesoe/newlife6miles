@@ -11,10 +11,10 @@ const Process = () => {
   const steps = [
     {
       icon: <Cylinder className="w-5 h-5 text-primary-foreground" />,
-      title: t("PET Preform Tube", "PET Preform Tube"),
+      title: t("PET Preform Tube", "PET Preform Tube (ကုန်ကြမ်း)"),
       description: t(
         "The journey begins with a small PET preform tube—the raw material that will become a bottle.",
-        "ခရီးစဉ်သည် သေးငယ်သော PET Preform Tube မှ စတင်ပါသည်—ဘူးဖြစ်လာမည့် ကုန်ကြမ်း။"
+        "ဘူးဖြစ်လာမည့် ကုန်ကြမ်းဖြစ်သော PET Preform Tube မှ စတင်ပါသည်။"
       ),
     },
     {
@@ -30,7 +30,7 @@ const Process = () => {
       title: t("Bottle Shell Formation", "ဘူးအခွံ ပုံသွင်းခြင်း"),
       description: t(
         "Air is blown into the heated preform, expanding it into the final bottle shell shape.",
-        "အပူပေးထားသော Preform ထဲသို့ လေမှုတ်သွင်းပြီး နောက်ဆုံးဘူးအခွံပုံစံသို့ ချဲ့ထွင်ပါသည်။"
+        "အပူပေးထားသော Preform ထဲသို့ လေမှုတ်သွင်းပြီး ဘူးအခွံပုံစံသို့ ချဲ့ထွင်ပါသည်။"
       ),
     },
     {
@@ -38,7 +38,7 @@ const Process = () => {
       title: t("Cap Sealing", "အဖုံးပိတ်ခြင်း"),
       description: t(
         "A secure cap is added to complete the container, ready for water filling.",
-        "ရေဖြည့်ရန် အဆင်သင့်ဖြစ်သော ခိုင်မာသော အဖုံးဖြင့် ပိတ်ပါသည်။"
+        "ရေဖြည့်ရန် အဆင်သင့်ဖြစ်အောင် ခိုင်မာသော အဖုံးဖြင့် ပိတ်ထားပါသည်။"
       ),
     },
     {
@@ -62,7 +62,7 @@ const Process = () => {
             <div className="max-w-xl">
               <div className="industrial-line mb-4" />
               <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                {t("From Tube to Bottle", "Tube မှ ဘူးသို့")}
+                {t("From Tube to Bottle", "Preform Tube မှ ဘူးသို့")}
               </h1>
               <p className="text-muted-foreground">
                 {t(

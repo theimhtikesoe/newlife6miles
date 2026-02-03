@@ -114,7 +114,7 @@ const Products = () => {
                 <p className="text-muted-foreground">
                   {t(
                     "Three essential categories for complete water bottle packaging. Select a category to explore our products.",
-                    "ရေဘူးထုပ်ပိုးခြင်း အပြည့်အစုံအတွက် အဓိကအမျိုးအစား သုံးမျိုး။ ထုတ်ကုန်များကို ကြည့်ရန် အမျိုးအစားတစ်ခုကို ရွေးပါ။"
+                    "ရေဘူးထုပ်ပိုးမှု အပြည့်အဝအတွက် အဓိကအမျိုးအစား သုံးမျိုးပါ။ ထုတ်ကုန်များကို ကြည့်ရန် အမျိုးအစားတစ်ခုကို ရွေးပါ။"
                   )}
                 </p>
               </div>
@@ -271,7 +271,7 @@ const getCategoryDescMM = (id: string): string => {
   const descs: Record<string, string> = {
     "bottle-shells": "ရေဖြည့်ရန် အဆင်သင့်ဖြစ်သော ဘူးအခွံများ",
     "caps": "ဘူးတိုင်းအတွက် လုံခြုံစွာပိတ်နိုင်သော အဖုံးများ",
-    "preform-tubes": "ဘူးမဖြစ်ခင် ကုန်ကြမ်းပစ္စည်း",
+    "preform-tubes": "ဘူးမဖြစ်မီ ကုန်ကြမ်းဖြစ်သော Preform Tube များ",
   };
   return descs[id] || "";
 };
