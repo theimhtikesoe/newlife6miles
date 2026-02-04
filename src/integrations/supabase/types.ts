@@ -193,6 +193,45 @@ export type Database = {
         }
         Relationships: []
       }
+      workspace_photos: {
+        Row: {
+          created_at: string
+          description_en: string | null
+          description_mm: string | null
+          id: string
+          image_url: string
+          is_active: boolean
+          sort_order: number
+          title_en: string
+          title_mm: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description_en?: string | null
+          description_mm?: string | null
+          id?: string
+          image_url: string
+          is_active?: boolean
+          sort_order?: number
+          title_en: string
+          title_mm: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description_en?: string | null
+          description_mm?: string | null
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          sort_order?: number
+          title_en?: string
+          title_mm?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

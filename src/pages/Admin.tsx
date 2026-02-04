@@ -39,6 +39,17 @@ interface Product {
   images: string[] | null;
 }
 
+interface WorkspacePhoto {
+  id: string;
+  title_en: string;
+  title_mm: string;
+  description_en: string | null;
+  description_mm: string | null;
+  image_url: string;
+  is_active: boolean | null;
+  sort_order: number | null;
+}
+
 const emptyProduct: Omit<Product, "id"> = {
   product_id: "",
   name: "",
@@ -61,6 +72,16 @@ const emptyProduct: Omit<Product, "id"> = {
   images: [],
 };
 
+const emptyWorkspacePhoto: Omit<WorkspacePhoto, "id"> = {
+  title_en: "",
+  title_mm: "",
+  description_en: "",
+  description_mm: "",
+  image_url: "",
+  is_active: true,
+  sort_order: 0,
+};
+
 // Category name translations
 const getCategoryNameMM = (id: string): string => {
   const names: Record<string, string> = {
@@ -81,6 +102,12 @@ const Admin = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadingCap, setUploadingCap] = useState(false);
   const [uploadingImages, setUploadingImages] = useState<boolean[]>([false, false, false]);
+  const [workspacePhotos, setWorkspacePhotos] = useState<WorkspacePhoto[]>([]);
+  const [workspaceLoading, setWorkspaceLoading] = useState(true);
+  const [isWorkspaceDialogOpen, setIsWorkspaceDialogOpen] = useState(false);
+  const [editingWorkspacePhoto, setEditingWorkspacePhoto] = useState<WorkspacePhoto | null>(null);
+  const [workspaceForm, setWorkspaceForm] = useState<Omit<WorkspacePhoto, "id">>(emptyWorkspacePhoto);
+  const [uploadingWorkspace, setUploadingWorkspace] = useState(false);
   
   // Price visibility settings
   const { data: appSettings, isLoading: settingsLoading } = useAppSettings();
@@ -99,6 +126,7 @@ const Admin = () => {
   useEffect(() => {
     if (user && isAdmin) {
       fetchProducts();
+      fetchWorkspacePhotos();
     }
   }, [user, isAdmin]);
 
@@ -115,6 +143,23 @@ const Admin = () => {
       toast.error("ပစ္စည်းများ ရယူ၍မရပါ: " + error.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchWorkspacePhotos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("workspace_photos")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+      setWorkspacePhotos(data || []);
+    } catch (error: any) {
+      toast.error("Workspace ပုံများ ရယူ၍မရပါ: " + error.message);
+    } finally {
+      setWorkspaceLoading(false);
     }
   };
 
@@ -170,6 +215,33 @@ const Admin = () => {
     }
   };
 
+  const uploadWorkspaceImage = async (file: File) => {
+    setUploadingWorkspace(true);
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `workspace/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("workspace-photos")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("workspace-photos")
+        .getPublicUrl(filePath);
+
+      setWorkspaceForm({ ...workspaceForm, image_url: publicUrl });
+      toast.success("ပုံ အပ်လုဒ်တင်ပြီးပါပြီ");
+    } catch (error: any) {
+      toast.error("ပုံ အပ်လုဒ်တင်၍မရပါ: " + error.message);
+    } finally {
+      setUploadingWorkspace(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -221,6 +293,83 @@ const Admin = () => {
       fetchProducts();
     } catch (error: any) {
       toast.error("ပစ္စည်း သိမ်း၍မရပါ: " + error.message);
+    }
+  };
+
+  const handleWorkspaceSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!workspaceForm.title_en.trim() || !workspaceForm.title_mm.trim()) {
+      toast.error("English နှင့် Myanmar အမည်များ ထည့်ရန်လိုအပ်ပါသည်");
+      return;
+    }
+
+    if (!workspaceForm.image_url) {
+      toast.error("Workspace ပုံ တင်ရန်လိုအပ်ပါသည်");
+      return;
+    }
+
+    try {
+      const dataToSave = {
+        ...workspaceForm,
+        description_en: workspaceForm.description_en || null,
+        description_mm: workspaceForm.description_mm || null,
+      };
+
+      if (editingWorkspacePhoto) {
+        const { error } = await supabase
+          .from("workspace_photos")
+          .update(dataToSave)
+          .eq("id", editingWorkspacePhoto.id);
+
+        if (error) throw error;
+        toast.success("Workspace ပုံ ပြင်ဆင်ပြီးပါပြီ");
+      } else {
+        const { error } = await supabase
+          .from("workspace_photos")
+          .insert([dataToSave]);
+
+        if (error) throw error;
+        toast.success("Workspace ပုံအသစ် ထည့်ပြီးပါပြီ");
+      }
+
+      setIsWorkspaceDialogOpen(false);
+      setEditingWorkspacePhoto(null);
+      setWorkspaceForm(emptyWorkspacePhoto);
+      fetchWorkspacePhotos();
+    } catch (error: any) {
+      toast.error("Workspace ပုံ သိမ်း၍မရပါ: " + error.message);
+    }
+  };
+
+  const handleWorkspaceEdit = (photo: WorkspacePhoto) => {
+    setEditingWorkspacePhoto(photo);
+    setWorkspaceForm({
+      title_en: photo.title_en,
+      title_mm: photo.title_mm,
+      description_en: photo.description_en || "",
+      description_mm: photo.description_mm || "",
+      image_url: photo.image_url,
+      is_active: photo.is_active ?? true,
+      sort_order: photo.sort_order ?? 0,
+    });
+    setIsWorkspaceDialogOpen(true);
+  };
+
+  const handleWorkspaceDelete = async (photo: WorkspacePhoto) => {
+    if (!confirm(`"${photo.title_en}" ကို ဖျက်မှာ သေချာပါသလား?`)) return;
+
+    try {
+      const { error } = await supabase
+        .from("workspace_photos")
+        .delete()
+        .eq("id", photo.id);
+
+      if (error) throw error;
+      toast.success("Workspace ပုံ ဖျက်ပြီးပါပြီ");
+      fetchWorkspacePhotos();
+    } catch (error: any) {
+      toast.error("Workspace ပုံ ဖျက်၍မရပါ: " + error.message);
     }
   };
 
@@ -300,7 +449,7 @@ const Admin = () => {
     setFormData({ ...formData, images: newImages });
   };
 
-  if (authLoading || isLoading) {
+  if (authLoading || isLoading || workspaceLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
         <div className="flex flex-col items-center gap-4">
@@ -961,6 +1110,275 @@ const Admin = () => {
             </Button>
           </div>
         </div>
+
+        {/* Workspace Photos */}
+        <section className="mb-8">
+          <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <ImageIcon className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Workspace ပုံများ</p>
+                <p className="text-2xl font-bold">{workspacePhotos.length}</p>
+              </div>
+            </div>
+
+            <Dialog open={isWorkspaceDialogOpen} onOpenChange={(open) => {
+              setIsWorkspaceDialogOpen(open);
+              if (!open) {
+                setEditingWorkspacePhoto(null);
+                setWorkspaceForm(emptyWorkspacePhoto);
+              }
+            }}>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-primary/90 shadow-md">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Workspace ပုံ ထည့်ရန်
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader className="pb-4 border-b">
+                  <DialogTitle className="text-xl font-semibold">
+                    {editingWorkspacePhoto ? "Workspace ပုံ ပြင်ဆင်ရန်" : "Workspace ပုံအသစ် ထည့်ရန်"}
+                  </DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleWorkspaceSubmit} className="space-y-6 pt-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="workspace_title_en" className="text-sm font-medium">Title (English) *</Label>
+                      <Input
+                        id="workspace_title_en"
+                        value={workspaceForm.title_en}
+                        onChange={(e) => setWorkspaceForm({ ...workspaceForm, title_en: e.target.value })}
+                        placeholder="Workspace title in English"
+                        className="h-11"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="workspace_title_mm" className="text-sm font-medium">Title (Myanmar) *</Label>
+                      <Input
+                        id="workspace_title_mm"
+                        value={workspaceForm.title_mm}
+                        onChange={(e) => setWorkspaceForm({ ...workspaceForm, title_mm: e.target.value })}
+                        placeholder="မြန်မာလို ခေါင်းစဉ်"
+                        className="h-11"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="workspace_desc_en" className="text-sm font-medium">Description (English)</Label>
+                      <Textarea
+                        id="workspace_desc_en"
+                        value={workspaceForm.description_en || ""}
+                        onChange={(e) => setWorkspaceForm({ ...workspaceForm, description_en: e.target.value })}
+                        placeholder="Short description in English"
+                        className="min-h-[100px] resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="workspace_desc_mm" className="text-sm font-medium">Description (Myanmar)</Label>
+                      <Textarea
+                        id="workspace_desc_mm"
+                        value={workspaceForm.description_mm || ""}
+                        onChange={(e) => setWorkspaceForm({ ...workspaceForm, description_mm: e.target.value })}
+                        placeholder="မြန်မာလို အကျဉ်းချုပ်ဖော်ပြချက်"
+                        className="min-h-[100px] resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Workspace ပုံ *</Label>
+                    <div className="border-2 border-dashed border-border/60 rounded-xl p-4 text-center bg-muted/30 hover:bg-muted/50 transition-colors">
+                      {workspaceForm.image_url ? (
+                        <div className="space-y-3">
+                          <div className="aspect-video max-h-48 mx-auto overflow-hidden rounded-lg bg-white">
+                            <img
+                              src={workspaceForm.image_url}
+                              alt="Workspace"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex items-center justify-center gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setWorkspaceForm({ ...workspaceForm, image_url: \"\" })}
+                              className="text-destructive hover:text-destructive"
+                            >
+                              ဖယ်ရှားရန်
+                            </Button>
+                            <label className="cursor-pointer">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) uploadWorkspaceImage(file);
+                                }}
+                                disabled={uploadingWorkspace}
+                              />
+                              <Button type="button" variant="outline" size="sm">
+                                <Upload className="w-4 h-4 mr-2" />
+                                ပုံပြောင်းရန်
+                              </Button>
+                            </label>
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="cursor-pointer block py-6">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) uploadWorkspaceImage(file);
+                            }}
+                            disabled={uploadingWorkspace}
+                          />
+                          <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                            {uploadingWorkspace ? (
+                              <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                            ) : (
+                              <Upload className="w-10 h-10" />
+                            )}
+                            <span className="text-sm font-medium">
+                              {uploadingWorkspace ? "တင်နေသည်..." : "ပုံတင်ရန် နှိပ်ပါ"}
+                            </span>
+                          </div>
+                        </label>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="workspace_sort" className="text-sm font-medium">စီစဥ်မှု နံပါတ်</Label>
+                      <Input
+                        id="workspace_sort"
+                        type="number"
+                        value={workspaceForm.sort_order ?? 0}
+                        onChange={(e) => setWorkspaceForm({ ...workspaceForm, sort_order: parseInt(e.target.value) || 0 })}
+                        className="h-11"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg h-11 mt-6">
+                      <Switch
+                        id="workspace_active"
+                        checked={workspaceForm.is_active ?? true}
+                        onCheckedChange={(checked) => setWorkspaceForm({ ...workspaceForm, is_active: checked })}
+                      />
+                      <Label htmlFor="workspace_active" className="text-sm font-medium cursor-pointer">
+                        ပြသရန် ဖွင့်ထားမည်
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-3 pt-4 border-t">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsWorkspaceDialogOpen(false)}
+                      className="px-6"
+                    >
+                      ပယ်ဖျက်ရန်
+                    </Button>
+                    <Button type="submit" className="px-6 bg-primary hover:bg-primary/90">
+                      {editingWorkspacePhoto ? "သိမ်းဆည်းရန်" : "ထည့်သွင်းရန်"}
+                    </Button>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {workspacePhotos.length === 0 ? (
+            <Card className="border-dashed border-2 border-border/60">
+              <CardContent className="flex flex-col items-center justify-center py-10">
+                <div className="p-3 bg-muted rounded-full mb-3">
+                  <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-base font-semibold mb-1">Workspace ပုံ မရှိသေးပါ</h3>
+                <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
+                  Workspace ပုံကို ထည့်သွင်းပြီး သင့်လုပ်ငန်းခွင်ကို ပြသနိုင်ပါသည်
+                </p>
+                <Button onClick={() => setIsWorkspaceDialogOpen(true)} className="bg-primary hover:bg-primary/90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Workspace ပုံ ထည့်ရန်
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {workspacePhotos.map((photo) => (
+                <Card
+                  key={photo.id}
+                  className={`group relative overflow-hidden transition-all duration-200 hover:shadow-lg hover:border-primary/30 ${!photo.is_active ? 'opacity-60' : ''}`}
+                >
+                  {!photo.is_active && (
+                    <div className="absolute top-3 left-3 z-10">
+                      <span className="px-2 py-1 text-xs font-medium bg-muted text-muted-foreground rounded-full">
+                        ဝှက်ထားသည်
+                      </span>
+                    </div>
+                  )}
+                  <div className="aspect-video bg-gradient-to-br from-muted/50 to-muted overflow-hidden">
+                    {photo.image_url ? (
+                      <img
+                        src={photo.image_url}
+                        alt={photo.title_en}
+                        className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="w-12 h-12 text-muted-foreground/40" />
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground truncate">{photo.title_mm}</h3>
+                        <p className="text-xs text-muted-foreground truncate">{photo.title_en}</p>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                          onClick={() => handleWorkspaceEdit(photo)}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => handleWorkspaceDelete(photo)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    {(photo.description_mm || photo.description_en) && (
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {photo.description_mm || photo.description_en}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </section>
 
         {products.length === 0 ? (
           <Card className="border-dashed border-2 border-border/60">
