@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Product } from "@/data/products";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OptimizedImage from "./OptimizedImage";
 import ProductBuyButton from "./order/ProductBuyButton";
 
@@ -30,6 +30,13 @@ const ProductCard = ({ product, index, pricePerCap = 50 }: ProductCardProps) => 
   const hasAltImage = (product.images?.length || 0) > 1;
   const currentImage = product.images?.[hasAltImage && showCap ? 1 : 0];
 
+  useEffect(() => {
+    if (hasAltImage) {
+      const preload = new Image();
+      preload.src = product.images?.[1] || "";
+    }
+  }, [hasAltImage, product.images]);
+
   return (
     <div
       className="card-industrial p-6 flex flex-col group animate-slide-up relative"
@@ -45,7 +52,7 @@ const ProductCard = ({ product, index, pricePerCap = 50 }: ProductCardProps) => 
               src={currentImage}
               alt={product.name}
               aspectRatio="square"
-              className="p-2 group-hover:scale-105 transition-transform duration-300"
+              className="group-hover:scale-105 transition-transform duration-300"
               containerClassName="bg-gradient-to-br from-secondary to-muted group-hover:from-primary/5 group-hover:to-primary/10 transition-colors"
               enhanceOnHover
               showSkeleton={false}
