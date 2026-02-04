@@ -123,6 +123,35 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Location / Map */}
+      <section className="section-padding bg-secondary/30">
+        <div className="container-narrow">
+          <div className="text-center mb-8">
+            <div className="industrial-line mx-auto mb-4" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
+              {t("Find Us", "ကျွန်ုပ်တို့ကို ရှာပါ")}
+            </h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              {t(
+                "New Life (6-miles), Taunggyi. Tap the map for directions.",
+                "New Life (၆ မိုင်), တောင်ကြီး။ လမ်းညွှန်ကို ကြည့်ရန် မြေပုံကို နှိပ်ပါ။"
+              )}
+            </p>
+          </div>
+          <div className="rounded-xl overflow-hidden border border-border bg-background shadow-sm">
+            <iframe
+              title="New Life (6-miles) Location Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3730.69866855096!2d97.11059234031448!3d20.76300409693196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30ce7d86baa6a659%3A0x324a114826654074!2sNew%20Life%20(%206-miles%20)!5e0!3m2!1sen!2sth!4v1770235291863!5m2!1sen!2sth"
+              className="w-full h-[320px] sm:h-[420px] lg:h-[480px]"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="section-padding bg-foreground">
         <div className="container-narrow text-center">
