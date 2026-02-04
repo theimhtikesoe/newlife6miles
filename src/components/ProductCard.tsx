@@ -45,9 +45,11 @@ const ProductCard = ({ product, index, pricePerCap = 50 }: ProductCardProps) => 
               src={currentImage}
               alt={product.name}
               aspectRatio="square"
-              className="p-4 group-hover:scale-105 transition-transform duration-300"
+              className="p-2 group-hover:scale-105 transition-transform duration-300"
               containerClassName="bg-gradient-to-br from-secondary to-muted group-hover:from-primary/5 group-hover:to-primary/10 transition-colors"
               enhanceOnHover
+              showSkeleton={false}
+              fadeIn={false}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-secondary to-muted flex items-center justify-center">

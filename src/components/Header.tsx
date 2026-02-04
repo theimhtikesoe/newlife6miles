@@ -23,7 +23,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-lg overflow-hidden transition-transform group-hover:scale-105">
+            <div className="w-12 h-12 rounded-lg overflow-hidden transition-transform group-hover:scale-105">
               <img
                 src="/icons/logo-1024.png"
                 alt="New Life Packaging logo"

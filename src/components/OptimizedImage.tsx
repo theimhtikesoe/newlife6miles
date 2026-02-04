@@ -11,6 +11,8 @@ interface OptimizedImageProps {
   priority?: boolean;
   onLoad?: () => void;
   enhanceOnHover?: boolean;
+  showSkeleton?: boolean;
+  fadeIn?: boolean;
 }
 
 const OptimizedImage = memo(({
@@ -23,6 +25,8 @@ const OptimizedImage = memo(({
   priority = false,
   onLoad,
   enhanceOnHover = false,
+  showSkeleton = true,
+  fadeIn = true,
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -83,7 +87,7 @@ const OptimizedImage = memo(({
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden bg-secondary/30",
+        "relative overflow-hidden",
         aspectRatioClasses[aspectRatio],
         containerClassName
       )}
@@ -91,7 +95,7 @@ const OptimizedImage = memo(({
       onMouseLeave={() => enhanceOnHover && setIsHovered(false)}
     >
       {/* Skeleton loader */}
-      {!isLoaded && (
+      {showSkeleton && !isLoaded && (
         <div className="absolute inset-0 bg-gradient-to-r from-secondary via-muted to-secondary animate-pulse" />
       )}
 
@@ -107,7 +111,7 @@ const OptimizedImage = memo(({
           className={cn(
             "w-full h-full transition-[opacity,transform] duration-300 will-change-transform",
             objectFitClasses[objectFit],
-            isLoaded ? "opacity-100" : "opacity-0",
+            fadeIn ? (isLoaded ? "opacity-100" : "opacity-0") : "opacity-100",
             className
           )}
           style={{

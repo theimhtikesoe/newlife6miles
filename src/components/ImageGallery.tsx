@@ -57,6 +57,8 @@ const ImageGallery = ({ images, productName, labels, showLabels = true }: ImageG
             aspectRatio="square"
             priority
             enhanceOnHover
+            showSkeleton={false}
+            fadeIn={false}
           />
         </div>
 
@@ -120,6 +122,8 @@ const ImageGallery = ({ images, productName, labels, showLabels = true }: ImageG
                 alt={`${productName} thumbnail ${idx + 1}`}
                 className="p-1"
                 aspectRatio="square"
+                showSkeleton={false}
+                fadeIn={false}
               />
             </button>
           ))}
