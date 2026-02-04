@@ -12,8 +12,14 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <Droplets className="w-5 h-5 text-primary-foreground" />
+              <div className="w-10 h-10 rounded-lg overflow-hidden">
+                <img
+                  src="/icons/logo-1024.png"
+                  alt="New Life Packaging logo"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg leading-tight">New Life</span>
