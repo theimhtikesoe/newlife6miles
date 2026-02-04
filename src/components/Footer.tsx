@@ -76,6 +76,25 @@ const Footer = () => {
                 </span>
               </div>
             </div>
+            <div className="pt-2">
+              <div className="rounded-lg overflow-hidden border border-background/10">
+                <iframe
+                  title="New Life Packaging Location"
+                  src="https://maps.google.com/maps?q=6%20Miles%2C%20Taunggyi%2C%20Shan%20State%2C%20Myanmar&output=embed"
+                  className="w-full h-48"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <a
+                href="https://maps.app.goo.gl/ZyQy7ZrsLik6mvwPA"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex text-xs text-background/60 hover:text-background transition-colors"
+              >
+                {t("Open in Google Maps", "Google Maps တွင် ဖွင့်ရန်")}
+              </a>
+            </div>
           </div>
         </div>
 
