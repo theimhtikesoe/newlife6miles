@@ -4,13 +4,12 @@ import Footer from "@/components/Footer";
 import OptimizedImage from "@/components/OptimizedImage";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useWorkspacePhotos } from "@/hooks/useWorkspacePhotos";
+import { workspaceItems } from "@/data/workspace";
 
 const Workspace = () => {
   const { t, language } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const { data: workspaceItems = [] } = useWorkspacePhotos();
 
   const openLightbox = (index: number) => {
     setActiveIndex(index);

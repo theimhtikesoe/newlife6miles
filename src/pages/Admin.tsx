@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Plus, Pencil, Trash2, LogOut, Upload, Image as ImageIcon, Loader2, Package, ArrowUpDown, Check, Eye, EyeOff } from "lucide-react";
 import ReorderableProductList from "@/components/admin/ReorderableProductList";
 import { useAppSettings, useUpdateAppSettings } from "@/hooks/useAppSettings";
+import { workspaceItems } from "@/data/workspace";
 
 interface Product {
   id: string;
@@ -82,6 +83,17 @@ const emptyWorkspacePhoto: Omit<WorkspacePhoto, "id"> = {
   sort_order: 0,
 };
 
+const localWorkspacePhotos: WorkspacePhoto[] = workspaceItems.map((item, index) => ({
+  id: `local-${index + 1}`,
+  title_en: item.title.en,
+  title_mm: item.title.mm,
+  description_en: item.description?.en ?? null,
+  description_mm: item.description?.mm ?? null,
+  image_url: item.src,
+  is_active: true,
+  sort_order: index,
+}));
+
 // Category name translations
 const getCategoryNameMM = (id: string): string => {
   const names: Record<string, string> = {
@@ -147,20 +159,8 @@ const Admin = () => {
   };
 
   const fetchWorkspacePhotos = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("workspace_photos")
-        .select("*")
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: true });
-
-      if (error) throw error;
-      setWorkspacePhotos(data || []);
-    } catch (error: any) {
-      toast.error("Workspace ပုံများ ရယူ၍မရပါ: " + error.message);
-    } finally {
-      setWorkspaceLoading(false);
-    }
+    setWorkspacePhotos(localWorkspacePhotos);
+    setWorkspaceLoading(false);
   };
 
   const uploadImage = async (file: File, type: 'main' | 'cap' | number) => {
@@ -217,29 +217,8 @@ const Admin = () => {
 
   const uploadWorkspaceImage = async (file: File) => {
     setUploadingWorkspace(true);
-
-    try {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `workspace/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("workspace-photos")
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from("workspace-photos")
-        .getPublicUrl(filePath);
-
-      setWorkspaceForm({ ...workspaceForm, image_url: publicUrl });
-      toast.success("ပုံ အပ်လုဒ်တင်ပြီးပါပြီ");
-    } catch (error: any) {
-      toast.error("ပုံ အပ်လုဒ်တင်၍မရပါ: " + error.message);
-    } finally {
-      setUploadingWorkspace(false);
-    }
+    toast.error("Local workspace mode: အပ်လုဒ်တင်ခြင်း မရနိုင်ပါ။ public/workspace ထဲတွင် ပုံများ ထည့်ပြီး data/workspace.ts ကို ပြင်ဆင်ပါ။");
+    setUploadingWorkspace(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
