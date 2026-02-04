@@ -13,6 +13,7 @@ const Header = () => {
     { path: "/", label: t("Home", "ပင်မ") },
     { path: "/products", label: t("Products", "ထုတ်ကုန်များ") },
     { path: "/process", label: t("Process", "လုပ်ငန်းစဉ်") },
+    { path: "/workspace", label: t("Workspace", "လုပ်ငန်းခွင်") },
   ];
 
   const isActive = (path: string) => location.pathname === path;

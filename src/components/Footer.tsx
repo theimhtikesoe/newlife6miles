@@ -44,6 +44,9 @@ const Footer = () => {
               <Link to="/products" className="text-sm text-background/70 hover:text-background transition-colors">
                 {t("Products", "ထုတ်ကုန်များ")}
               </Link>
+              <Link to="/workspace" className="text-sm text-background/70 hover:text-background transition-colors">
+                {t("Workspace", "လုပ်ငန်းခွင်")}
+              </Link>
               <Link to="/process" className="text-sm text-background/70 hover:text-background transition-colors">
                 {t("Our Process", "ကျွန်ုပ်တို့၏လုပ်ငန်းစဉ်")}
               </Link>
