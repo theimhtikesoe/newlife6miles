@@ -1209,7 +1209,7 @@ const Admin = () => {
                               type="button"
                               variant="outline"
                               size="sm"
-                              onClick={() => setWorkspaceForm({ ...workspaceForm, image_url: \"\" })}
+                              onClick={() => setWorkspaceForm({ ...workspaceForm, image_url: "" })}
                               className="text-destructive hover:text-destructive"
                             >
                               ဖယ်ရှားရန်
