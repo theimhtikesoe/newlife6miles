@@ -61,6 +61,11 @@ const OptimizedImage = memo(({
     onLoad?.();
   };
 
+  // Reset loading state when image source changes
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [src]);
+
   const aspectRatioClasses = {
     square: "aspect-square",
     landscape: "aspect-[4/3]",
@@ -100,10 +105,9 @@ const OptimizedImage = memo(({
           decoding="async"
           onLoad={handleLoad}
           className={cn(
-            "w-full h-full transition-all duration-500",
+            "w-full h-full transition-[opacity,transform] duration-300 will-change-transform",
             objectFitClasses[objectFit],
             isLoaded ? "opacity-100" : "opacity-0",
-            "brightness-110 contrast-105 saturate-105", // Always enhanced for brighter look
             className
           )}
           style={{

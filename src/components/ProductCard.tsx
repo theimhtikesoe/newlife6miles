@@ -27,15 +27,15 @@ const getColorMM = (color: string): string => {
 const ProductCard = ({ product, index, pricePerCap = 50 }: ProductCardProps) => {
   const { t, language } = useLanguage();
   const [showCap, setShowCap] = useState(false);
-
-  const currentImage = product.images?.[showCap ? 1 : 0];
+  const hasAltImage = (product.images?.length || 0) > 1;
+  const currentImage = product.images?.[hasAltImage && showCap ? 1 : 0];
 
   return (
     <div
       className="card-industrial p-6 flex flex-col group animate-slide-up relative"
       style={{ animationDelay: `${index * 80}ms` }}
-      onMouseEnter={() => setShowCap(true)}
-      onMouseLeave={() => setShowCap(false)}
+      onMouseEnter={() => hasAltImage && setShowCap(true)}
+      onMouseLeave={() => hasAltImage && setShowCap(false)}
     >
       <Link to={`/product/${product.id}`} className="flex-1 flex flex-col">
         {/* Product Image */}
