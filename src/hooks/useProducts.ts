@@ -107,10 +107,12 @@ export const useProduct = (productId: string) => {
   return useQuery({
     queryKey: ["product", productId],
     queryFn: async () => {
+      const decodedId = decodeURIComponent(productId || "");
+
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("product_id", productId)
+        .eq("product_id", decodedId)
         .eq("is_active", true)
         .maybeSingle();
 
@@ -124,9 +126,32 @@ export const useProduct = (productId: string) => {
         return convertToAppProduct(data);
       }
 
+      // Try lookup by product name (for URLs using name instead of id)
+      const { data: nameMatch, error: nameError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("name", decodedId)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (nameError) {
+        console.error("Error fetching product by name:", nameError);
+        throw nameError;
+      }
+
+      if (nameMatch) {
+        return convertToAppProduct(nameMatch);
+      }
+
       // Fallback to static product
       const staticProducts = getSortedProducts();
-      return staticProducts.find((p) => p.id === productId);
+      const normalized = decodedId.toLowerCase().replace(/\s+/g, "-");
+      return staticProducts.find((p) => {
+        const byId = p.id.toLowerCase() === decodedId.toLowerCase();
+        const byName = p.name.toLowerCase() === decodedId.toLowerCase();
+        const byNameSlug = p.name.toLowerCase().replace(/\s+/g, "-") === normalized;
+        return byId || byName || byNameSlug;
+      });
     },
   });
 };
