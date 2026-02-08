@@ -79,8 +79,8 @@ const Footer = () => {
             <div className="pt-2">
               <div className="rounded-lg overflow-hidden border border-background/10">
                 <iframe
-                  title="New Life Packaging Location"
-                  src="https://maps.google.com/maps?q=6%20Miles%2C%20Taunggyi%2C%20Shan%20State%2C%20Myanmar&output=embed"
+                  title="New Life (6-miles) Location"
+                  src="https://maps.google.com/maps?q=20.762999,97.113162&z=16&output=embed"
                   className="w-full h-48"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
