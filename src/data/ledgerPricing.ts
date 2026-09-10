@@ -788,6 +788,37 @@ export const ledgerBottleRows: LedgerPricingRow[] = [
 export const LEDGER_CAP_PRICE = 40;
 
 const aliases: Record<string, string[]> = {
+  "ဒိန်သေးလတ်": ["ဒိန်သေး"],
+  "လေးဒေါင့်ဘူး": ["လေးထောင့် 13g"],
+  "ချိုချဥ်ကြီး": ["ချိုချဉ်အကြီး (အချိုရည်ဗူးကြီး)"],
+  "0.25L Blue": ["0.25 ပြာ"],
+  "0.25L": ["0.25"],
+  "0.3L S+1 Blue": ["0.3 ပြာ (S+1)"],
+  "0.3L Shal Shal": ["0.3 ပြာ (S+S)"],
+  "0.3L White": ["0.3 ဖြူ"],
+  "0.3L Wine White": ["ရွှေဝိုင်း"],
+  "Cho Chin": ["ချိုချဉ်အသေး"],
+  "15 Kyat Thar": ["ဒိန်ကြီး"],
+  "0.6L White": ["0.6 ဖြူ"],
+  "0.6L Blue": ["0.6 ပြာ"],
+  "0.6L Wine White": ["0.6 ဖြူ"],
+  "25 Kyat Thar": ["25 ကျပ်သား အဖြူ"],
+  "0.5L White": ["0.5 ဖြူ"],
+  "13 Kyat Thar Shal Shal": ["8 ဒေါင့် ပြာ"],
+  "13 Kyat Thar S+1": ["8 ဒေါင့် ပြာ"],
+  "1L Blue": ["1 လီတာ ပြာ"],
+  "1L White": ["1 လီတာ ဖြူ"],
+  "13 Kyat Thar White": ["8 ဒေါင့် ဖြူ"],
+  "11 Kyat Thar Blue": ["ဒိန်သေး (S+1)", "ဒိန်သေး (S+S)"],
+  "1L Wine White": ["1 လီတာ အဝိုင်း"],
+  "0.9L Blue": ["0.9 ပြာ"],
+  "11 Kyat Thar": ["ဒိန်သေး"],
+  "0.9L White": ["0.9 ဖြူ"],
+  "0.85L White": ["0.85"],
+  "0.85L Wine White": ["0.85"],
+  "40 Kyat Thar": ["နွားကြီး"],
+  "35 Kyat Thar": ["နွားသေး"],
+  "30 Kyat Thar": ["30 ကျပ်သား"],
   "0.3L-blue-s1": ["0.3 ပြာ (S+1)"],
   "0.3L-shal-shal": ["0.3 ပြာ (S+S)"],
   "0.3L-white": ["0.3 ဖြူ"],
@@ -817,8 +848,8 @@ const aliases: Record<string, string[]> = {
   "30thar": ["30 ကျပ်သား"],
 };
 
-export const getLedgerBottleRows = (productId: string): LedgerPricingRow[] => {
-  const names = aliases[productId] || [];
+export const getLedgerBottleRows = (productId: string, productName = ""): LedgerPricingRow[] => {
+  const names = aliases[productId] || aliases[productName] || [];
   return ledgerBottleRows.filter((row) => names.includes(row.productName));
 };
 
