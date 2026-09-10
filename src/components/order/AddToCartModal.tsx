@@ -46,7 +46,10 @@ const AddToCartModal = ({
   const { t } = useLanguage();
   const { addItem, updateItem } = useCart();
   const isBottle = product.category !== "caps";
-  const bottleRows = useMemo(() => getLedgerBottleRows(product.id), [product.id]);
+  const bottleRows = useMemo(
+    () => getLedgerBottleRows(product.id, product.name),
+    [product.id, product.name]
+  );
   const cardSizeOptions = useMemo(() => {
     if (!isBottle) {
       return [
