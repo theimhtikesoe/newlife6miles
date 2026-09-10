@@ -9,6 +9,8 @@ const OrderSuccess = () => {
   const { t } = useLanguage();
   const orderId = typeof window !== "undefined" ? window.localStorage.getItem("new-life-last-order-id") : null;
   const shortOrderId = orderId ? orderId.slice(0, 8).toUpperCase() : null;
+  const ledgerSyncPending = typeof window !== "undefined"
+    && window.localStorage.getItem("new-life-ledger-sync-status") === "pending";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -48,6 +50,14 @@ const OrderSuccess = () => {
                 "နောက်ဆုံးစျေးနှုန်း၊ လက်ကျန်နှင့် ပို့ဆောင်မှုအသေးစိတ်ကို ကောင်တာမှ ပြန်လည်ဆက်သွယ်အတည်ပြုပေးပါမည်။"
               )}
             </p>
+            {ledgerSyncPending && (
+              <p className="text-sm text-amber-700">
+                {t(
+                  "Your order was saved. Our team will sync it to the internal order desk shortly.",
+                  "အမှာစာကို သိမ်းထားပြီးပါပြီ။ အတွင်းပိုင်း Order စာရင်းသို့ ဆက်လက်ပို့ပေးနေပါမည်။"
+                )}
+              </p>
+            )}
           </div>
 
           {/* Actions */}
