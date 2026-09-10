@@ -41,10 +41,12 @@ const OrderConfirm = () => {
         product_id: item.productId,
         product_name: item.productName,
         price_per_cap: item.pricePerCap,
+        price_per_bottle: item.unitType === "bottle" ? item.pricePerCap : null,
         cap_size: item.capSize,
         card_quantity: item.cardQuantity,
         total_caps: item.totalCaps,
         total_price: item.totalPrice,
+        unit_type: item.unitType || "cap",
       }));
 
       // Submit customer + order items atomically. This avoids the previous
@@ -70,8 +72,28 @@ const OrderConfirm = () => {
         throw new Error("Order submission returned an invalid reference.");
       }
 
+      let ledgerSyncStatus = "pending";
+      try {
+        const ledgerResponse = await fetch("/api/ledger-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            milesOrderId: orderId,
+            customer: customerInfo,
+            totalAmount: getGrandTotal(),
+            items: orderItems,
+          }),
+        });
+        const ledgerResult = await ledgerResponse.json().catch(() => null);
+        if (ledgerResponse.ok && ledgerResult?.ok) ledgerSyncStatus = "synced";
+        else console.warn("Ledger order sync was not completed", ledgerResult);
+      } catch (syncError) {
+        console.warn("Ledger order sync request failed", syncError);
+      }
+
       // Success
       window.localStorage.setItem("new-life-last-order-id", orderId);
+      window.localStorage.setItem("new-life-ledger-sync-status", ledgerSyncStatus);
       clearCart();
       navigate("/order-success");
     } catch (error) {
