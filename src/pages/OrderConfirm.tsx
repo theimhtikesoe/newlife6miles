@@ -32,7 +32,18 @@ const OrderConfirm = () => {
     if (items.length === 0 || !customerInfo) navigate("/cart", { replace: true });
   }, [customerInfo, items.length, navigate]);
 
-  if (items.length === 0 || !customerInfo) return null;
+  if (items.length === 0 || !customerInfo) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">{t("Your cart is empty.", "သင့်စျေးခြင်းထဲတွင် ပစ္စည်းမရှိသေးပါ။")}</p>
+          <Button onClick={() => navigate("/cart", { replace: true })}>
+            {t("Back to cart", "စျေးခြင်းသို့ ပြန်သွားရန်")}
+          </Button>
+        </div>
+      </main>
+    );
+  }
 
   const handleConfirmOrder = async () => {
     setIsSubmitting(true);
