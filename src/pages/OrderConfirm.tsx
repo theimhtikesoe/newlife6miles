@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -28,10 +28,11 @@ const OrderConfirm = () => {
     return new Intl.NumberFormat("my-MM").format(price);
   };
 
-  if (items.length === 0 || !customerInfo) {
-    navigate("/cart");
-    return null;
-  }
+  useEffect(() => {
+    if (items.length === 0 || !customerInfo) navigate("/cart", { replace: true });
+  }, [customerInfo, items.length, navigate]);
+
+  if (items.length === 0 || !customerInfo) return null;
 
   const handleConfirmOrder = async () => {
     setIsSubmitting(true);
@@ -49,9 +50,9 @@ const OrderConfirm = () => {
         unit_type: item.unitType || "cap",
       }));
 
-      // Submit customer + order items atomically. This avoids the previous
-      // orders.insert().select() RLS failure and prevents orphan orders.
-      const { data: orderId, error: orderError } = await supabase.rpc(
+      // Prefer the atomic RPC. Older production projects may not have the
+      // migration yet, so keep checkout working while that migration rolls out.
+      const { data: rpcOrderId, error: orderError } = await supabase.rpc(
         "submit_public_order",
         {
           p_customer_name: customerInfo.name,
@@ -63,12 +64,31 @@ const OrderConfirm = () => {
         }
       );
 
-      if (orderError || !orderId) {
-        const message = orderError?.message || "Order submission returned no reference.";
-        throw new Error(message);
+      let orderId = rpcOrderId;
+      const rpcMissing = orderError?.code === "PGRST202" || /submit_public_order|schema cache|function.*does not exist/i.test(orderError?.message || "");
+      if (orderError && !rpcMissing) throw new Error(orderError.message || "Order submission failed.");
+
+      if (rpcMissing) {
+        const fallbackOrderId = crypto.randomUUID();
+        const { error: insertOrderError } = await supabase
+          .from("orders")
+          .insert({
+            id: fallbackOrderId,
+            customer_name: customerInfo.name,
+            customer_phone: customerInfo.phone,
+            customer_city: customerInfo.city,
+            customer_notes: customerInfo.notes || null,
+            total_amount: getGrandTotal(),
+          });
+        if (insertOrderError) throw new Error(insertOrderError.message || "Order submission returned no reference.");
+        const { error: itemsError } = await supabase.from("order_items").insert(
+          orderItems.map(({ unit_type: _unitType, price_per_bottle: _pricePerBottle, ...item }) => ({ ...item, order_id: fallbackOrderId }))
+        );
+        if (itemsError) throw new Error(itemsError.message || "Order items could not be saved.");
+        orderId = fallbackOrderId;
       }
 
-      if (typeof orderId !== "string") {
+      if (!orderId || typeof orderId !== "string") {
         throw new Error("Order submission returned an invalid reference.");
       }
 
