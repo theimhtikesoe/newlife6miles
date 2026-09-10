@@ -76,6 +76,7 @@ const OrderConfirm = () => {
       }
 
       // Success
+      window.localStorage.setItem("new-life-last-order-id", orderData.id);
       clearCart();
       navigate("/order-success");
     } catch (error) {

@@ -3,10 +3,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Home, Package } from "lucide-react";
+import { CheckCircle, ClipboardCheck, Home, Package } from "lucide-react";
 
 const OrderSuccess = () => {
   const { t } = useLanguage();
+  const orderId = typeof window !== "undefined" ? window.localStorage.getItem("new-life-last-order-id") : null;
+  const shortOrderId = orderId ? orderId.slice(0, 8).toUpperCase() : null;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -30,6 +32,23 @@ const OrderSuccess = () => {
               "သင့်အမှာစာအတွက် ကျေးဇူးတင်ပါသည်။ အသေးစိတ်အတည်ပြုရန် မကြာမီ ဆက်သွယ်ပါမည်။"
             )}
           </p>
+
+          <div className="card-industrial text-left p-5 mb-8 space-y-3">
+            {shortOrderId && (
+              <div className="flex items-center gap-3">
+                <ClipboardCheck className="w-5 h-5 text-primary" />
+                <span>
+                  {t("Request reference", "အမှာစာနံပါတ်")}: <strong>{shortOrderId}</strong>
+                </span>
+              </div>
+            )}
+            <p className="text-sm text-muted-foreground">
+              {t(
+                "Our counter will contact you to confirm the final price, availability, and delivery details.",
+                "နောက်ဆုံးစျေးနှုန်း၊ လက်ကျန်နှင့် ပို့ဆောင်မှုအသေးစိတ်ကို ကောင်တာမှ ပြန်လည်ဆက်သွယ်အတည်ပြုပေးပါမည်။"
+              )}
+            </p>
+          </div>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
