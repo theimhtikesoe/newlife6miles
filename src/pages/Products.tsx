@@ -113,8 +113,8 @@ const Products = () => {
                 </h1>
                 <p className="text-muted-foreground">
                   {t(
-                    "Three essential categories for complete water bottle packaging. Select a category to explore our products.",
-                    "ရေဘူးထုပ်ပိုးမှု အပြည့်အဝအတွက် အဓိကအမျိုးအစား သုံးမျိုးပါ။ ထုတ်ကုန်များကို ကြည့်ရန် အမျိုးအစားတစ်ခုကို ရွေးပါ။"
+                    "Explore our bottle shells and caps for clean water packaging. Select a category to view product details and start an order.",
+                    "သန့်ရှင်းသောရေ ထုပ်ပိုးရန် ဘူးအခွံနှင့် အဖုံးများကို လေ့လာပါ။ အသေးစိတ်ကြည့်ပြီး အမှာစာစတင်ရန် အမျိုးအစားတစ်ခုကို ရွေးပါ။"
                   )}
                 </p>
               </div>

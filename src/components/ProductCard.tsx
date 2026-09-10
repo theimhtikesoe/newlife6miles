@@ -105,10 +105,7 @@ const ProductCard = ({ product, index, pricePerCap = 50 }: ProductCardProps) => 
           <span>{t("View Specs", "အသေးစိတ်ကြည့်ရန်")}</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
-
-        {/* Buy button temporarily hidden
         <ProductBuyButton product={product} pricePerCap={pricePerCap} />
-        */}
       </div>
     </div>
   );

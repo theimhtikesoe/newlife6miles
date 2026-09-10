@@ -12,6 +12,7 @@ const Header = () => {
   const navLinks = [
     { path: "/", label: t("Home", "ပင်မ") },
     { path: "/products", label: t("Products", "ထုတ်ကုန်များ") },
+    { path: "/cart", label: t("My Order", "ကျွန်ုပ်၏အမှာစာ") },
     { path: "/workspace", label: t("Workspace", "လုပ်ငန်းခွင်") },
   ];
 

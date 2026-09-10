@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ImageGallery from "@/components/ImageGallery";
 import PriceDisplay from "@/components/PriceDisplay";
+import ProductBuyButton from "@/components/order/ProductBuyButton";
 import { useProduct, useCategory, ProductWithPricing } from "@/hooks/useProducts";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -221,6 +222,21 @@ const ProductDetail = () => {
                     )}
                   </p>
                 </div>
+
+                {product.category !== "caps" && (
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <ProductBuyButton
+                      product={product}
+                      pricePerCap={productWithPricing?.pricePerCap || 50}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      {t(
+                        "Add your required quantity, then send your request for confirmation.",
+                        "လိုအပ်သော အရေအတွက်ကို ရွေးပြီး အတည်ပြုရန် အမှာစာပေးပို့ပါ။"
+                      )}
+                    </span>
+                  </div>
+                )}
 
                 {/* Back Button */}
                 <Link

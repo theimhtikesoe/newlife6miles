@@ -123,6 +123,43 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Customer Order Guide */}
+      <section className="section-padding bg-primary/5">
+        <div className="container-narrow">
+          <div className="text-center mb-10">
+            <div className="industrial-line mx-auto mb-4" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
+              {t("How to order", "မှာယူပုံ အဆင့်ဆင့်")}
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              {t(
+                "Choose the bottle you need, add your quantity, and send the request. Our counter will confirm the final price and availability.",
+                "လိုအပ်သောဘူးကို ရွေးချယ်ပြီး အရေအတွက်ထည့်ကာ အမှာစာပေးပို့ပါ။ နောက်ဆုံးစျေးနှုန်းနှင့် လက်ကျန်ကို ကောင်တာမှ ပြန်လည်အတည်ပြုပေးပါမည်။"
+              )}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              ["01", t("Browse products", "ထုတ်ကုန်များကြည့်ရန်"), t("Compare sizes, colors, and bottle details.", "အရွယ်အစား၊ အရောင်နှင့် ဘူးအချက်အလက်များကို နှိုင်းယှဉ်ပါ။")],
+              ["02", t("Build your order", "အမှာစာ ပြင်ဆင်ရန်"), t("Select the pack size and quantity you need.", "လိုအပ်သော ကတ်အရွယ်အစားနှင့် အရေအတွက်ကို ရွေးပါ။")],
+              ["03", t("Confirm with us", "အတည်ပြုရန် ဆက်သွယ်ပါ"), t("We confirm price, stock, and delivery details.", "စျေးနှုန်း၊ လက်ကျန်နှင့် ပို့ဆောင်မှုကို ပြန်လည်အတည်ပြုပါမည်။")],
+            ].map(([number, title, description]) => (
+              <div key={number} className="card-industrial p-6 bg-background">
+                <span className="text-sm font-bold text-primary">{number}</span>
+                <h3 className="font-semibold text-foreground mt-3 mb-2">{title}</h3>
+                <p className="text-sm text-muted-foreground">{description}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/products" className="btn-primary inline-flex items-center gap-2 group">
+              {t("Start an order", "အမှာစာ စတင်ရန်")}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Location / Map */}
       <section className="section-padding bg-secondary/30">
         <div className="container-narrow">
