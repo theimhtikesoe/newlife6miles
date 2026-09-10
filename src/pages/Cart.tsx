@@ -79,6 +79,7 @@ const Cart = () => {
             <div className="space-y-4 mb-8">
               {items.map((item) => {
                 const product = getProductForItem(item);
+                const isBottle = item.unitType === "bottle" || product?.category !== "caps";
                 return (
                   <div
                     key={item.id}
@@ -102,9 +103,9 @@ const Cart = () => {
                       </h3>
 
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-muted-foreground mb-2">
-                        <span>{t("Cap Size", "ကတ်တစ်ခုအဖုံးအရေအတွက်")}:</span>
+                        <span>{isBottle ? t("Bottles/Card", "ကဒ်တစ်ကဒ်ဆံ့ဘူး") : t("Cap Size", "ကတ်တစ်ခုအဖုံးအရေအတွက်")}:</span>
                         <span className="font-medium text-foreground">
-                          {formatPrice(item.capSize)} အဖုံး
+                          {formatPrice(item.capSize)} {isBottle ? t("bottles", "ဘူး") : t("caps", "အဖုံး")}
                         </span>
 
                         <span>{t("Cards", "ကတ်")}:</span>
@@ -112,12 +113,12 @@ const Cart = () => {
                           {item.cardQuantity} ကတ်
                         </span>
 
-                        <span>{t("Total Caps", "စုစုပေါင်း အဖုံး")}:</span>
+                        <span>{isBottle ? t("Total Bottles", "စုစုပေါင်း ဘူး") : t("Total Caps", "စုစုပေါင်း အဖုံး")}:</span>
                         <span className="font-medium text-foreground">
-                          {formatPrice(item.totalCaps)} အဖုံး
+                          {formatPrice(item.totalCaps)} {isBottle ? t("bottles", "ဘူး") : t("caps", "အဖုံး")}
                         </span>
 
-                        <span>{t("Price/Cap", "အဖုံးတစ်ခုလျှင် စျေးနှုန်း")}:</span>
+                        <span>{isBottle ? t("Price/Bottle", "ဘူးတစ်လုံးလျှင် စျေးနှုန်း") : t("Price/Cap", "အဖုံးတစ်ခုလျှင် စျေးနှုန်း")}:</span>
                         <span className="font-medium text-foreground">
                           {formatPrice(item.pricePerCap)} MMK
                         </span>

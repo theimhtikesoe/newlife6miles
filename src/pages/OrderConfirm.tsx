@@ -128,7 +128,9 @@ const OrderConfirm = () => {
               </h2>
 
               <div className="space-y-3">
-                {items.map((item) => (
+                {items.map((item) => {
+                  const isBottle = item.unitType === "bottle";
+                  return (
                   <div
                     key={item.id}
                     className="flex items-center justify-between text-sm"
@@ -138,14 +140,15 @@ const OrderConfirm = () => {
                         {item.productName}
                       </span>
                       <div className="text-muted-foreground">
-                        {formatPrice(item.capSize)} အဖုံး × {item.cardQuantity} ကတ်
+                        {formatPrice(item.capSize)} {isBottle ? t("bottles", "ဘူး") : t("caps", "အဖုံး")} × {item.cardQuantity} {t("cards", "ကတ်")}
                       </div>
                     </div>
                     <span className="font-semibold">
                       {formatPrice(item.totalPrice)} MMK
                     </span>
                   </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="h-px bg-border my-4" />
