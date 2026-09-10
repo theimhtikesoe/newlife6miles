@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { Product } from "@/data/products";
 
 export interface CartItem {
@@ -33,12 +33,38 @@ interface CartContextType {
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
+const CART_STORAGE_KEY = "new-life-customer-cart";
+const CUSTOMER_STORAGE_KEY = "new-life-customer-info";
+
+const readStorage = <T,>(key: string, fallback: T): T => {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const value = window.localStorage.getItem(key);
+    return value ? (JSON.parse(value) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
+  const [items, setItems] = useState<CartItem[]>(() => readStorage(CART_STORAGE_KEY, []));
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(() =>
+    readStorage<CustomerInfo | null>(CUSTOMER_STORAGE_KEY, null)
+  );
+
+  useEffect(() => {
+    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  }, [items]);
+
+  useEffect(() => {
+    if (customerInfo) {
+      window.localStorage.setItem(CUSTOMER_STORAGE_KEY, JSON.stringify(customerInfo));
+    } else {
+      window.localStorage.removeItem(CUSTOMER_STORAGE_KEY);
+    }
+  }, [customerInfo]);
 
   const addItem = useCallback((item: Omit<CartItem, "id">) => {
     const newItem: CartItem = {
@@ -61,6 +87,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const clearCart = useCallback(() => {
     setItems([]);
     setCustomerInfo(null);
+    window.localStorage.removeItem(CART_STORAGE_KEY);
+    window.localStorage.removeItem(CUSTOMER_STORAGE_KEY);
   }, []);
 
   const getGrandTotal = useCallback(() => {

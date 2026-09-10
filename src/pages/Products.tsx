@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
   DndContext,
   closestCenter,
@@ -25,8 +25,9 @@ import { useProducts, useCategories, useCategory } from "@/hooks/useProducts";
 import { useProductReorder } from "@/hooks/useProductReorder";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Loader2, Shield } from "lucide-react";
+import { Loader2, Search, Shield, X } from "lucide-react";
 import { Product } from "@/data/products";
+import { Input } from "@/components/ui/input";
 
 const Products = () => {
   const { categoryId } = useParams();
@@ -39,9 +40,19 @@ const Products = () => {
   
   // Local state for optimistic reordering
   const [localProducts, setLocalProducts] = useState<Product[] | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
   
   // Use local products if set, otherwise use fetched products
   const displayProducts = localProducts || products;
+  const filteredProducts = useMemo(() => {
+    if (!displayProducts || !searchTerm.trim() || isAdmin) return displayProducts;
+    const query = searchTerm.trim().toLowerCase();
+    return displayProducts.filter((product) =>
+      [product.name, product.description_en, product.description_mm, ...product.colors, ...product.sizes]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(query))
+    );
+  }, [displayProducts, isAdmin, searchTerm]);
 
   // Drag sensors with touch support
   const sensors = useSensors(
@@ -113,8 +124,8 @@ const Products = () => {
                 </h1>
                 <p className="text-muted-foreground">
                   {t(
-                    "Three essential categories for complete water bottle packaging. Select a category to explore our products.",
-                    "ရေဘူးထုပ်ပိုးမှု အပြည့်အဝအတွက် အဓိကအမျိုးအစား သုံးမျိုးပါ။ ထုတ်ကုန်များကို ကြည့်ရန် အမျိုးအစားတစ်ခုကို ရွေးပါ။"
+                    "Explore our bottle shells and caps for clean water packaging. Select a category to view product details and start an order.",
+                    "သန့်ရှင်းသောရေ ထုပ်ပိုးရန် ဘူးအခွံနှင့် အဖုံးများကို လေ့လာပါ။ အသေးစိတ်ကြည့်ပြီး အမှာစာစတင်ရန် အမျိုးအစားတစ်ခုကို ရွေးပါ။"
                   )}
                 </p>
               </div>
@@ -195,7 +206,30 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Products Grid */}
+            {!isAdmin && (
+              <div className="mt-6 relative max-w-xl">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder={t("Search by size, color, or product name", "အရွယ်အစား၊ အရောင် သို့မဟုတ် အမည်ဖြင့် ရှာရန်")}
+                  className="pl-9 pr-10 bg-background"
+                  aria-label={t("Search products", "ထုတ်ကုန်များ ရှာရန်")}
+                />
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    aria-label={t("Clear search", "ရှာဖွေမှု ဖျက်ရန်")}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Products Grid */}
         <section className="section-padding pt-0">
           <div className="container-narrow">
             {isLoading ? (
@@ -211,7 +245,7 @@ const Products = () => {
                   {t("Error loading products.", "ထုတ်ကုန်များ ရယူရာတွင် အမှားရှိသည်။")}
                 </p>
               </div>
-            ) : displayProducts && displayProducts.length > 0 ? (
+            ) : filteredProducts && filteredProducts.length > 0 ? (
               isAdmin ? (
                 <DndContext
                   sensors={sensors}
@@ -223,7 +257,7 @@ const Products = () => {
                     strategy={rectSortingStrategy}
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {displayProducts.map((product, index) => (
+                      {filteredProducts.map((product, index) => (
                         <SortableProductCard
                           key={product.id}
                           product={product}
@@ -236,7 +270,7 @@ const Products = () => {
                 </DndContext>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {displayProducts.map((product, index) => (
+                  {filteredProducts.map((product, index) => (
                     <ProductCard key={product.id} product={product} index={index} />
                   ))}
                 </div>
@@ -244,7 +278,9 @@ const Products = () => {
             ) : (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">
-                  {t("No products found in this category.", "ဤအမျိုးအစားတွင် ထုတ်ကုန်မရှိပါ။")}
+                  {searchTerm
+                    ? t("No products match your search.", "ရှာဖွေထားသော ထုတ်ကုန် မတွေ့ပါ။")
+                    : t("No products found in this category.", "ဤအမျိုးအစားတွင် ထုတ်ကုန်မရှိပါ။")}
                 </p>
               </div>
             )}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import AddToCartModal from "./AddToCartModal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ProductBuyButtonProps {
   product: Product;
@@ -10,6 +11,7 @@ interface ProductBuyButtonProps {
 
 const ProductBuyButton = ({ product, pricePerCap = 50 }: ProductBuyButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -22,7 +24,7 @@ const ProductBuyButton = ({ product, pricePerCap = 50 }: ProductBuyButtonProps) 
         size="sm"
         className="shrink-0 font-medium"
       >
-        ဝယ်ရန်
+        {t("Add to order", "မှာယူရန်")}
       </Button>
 
       <AddToCartModal
