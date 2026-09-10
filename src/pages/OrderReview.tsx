@@ -54,7 +54,9 @@ const OrderReview = () => {
               </h2>
 
               <div className="space-y-4">
-                {items.map((item, index) => (
+                {items.map((item, index) => {
+                  const isBottle = item.unitType === "bottle";
+                  return (
                   <div key={item.id}>
                     {index > 0 && <div className="h-px bg-border mb-4" />}
                     <div className="flex items-start gap-4">
@@ -72,11 +74,11 @@ const OrderReview = () => {
                           {item.productName}
                         </h3>
                         <div className="text-sm text-muted-foreground mt-1">
-                          {formatPrice(item.capSize)} အဖုံး × {item.cardQuantity}{" "}
-                          ကတ် = {formatPrice(item.totalCaps)} အဖုံး
+                          {formatPrice(item.capSize)} {isBottle ? t("bottles", "ဘူး") : t("caps", "အဖုံး")} × {item.cardQuantity}{" "}
+                          {t("cards", "ကတ်")} = {formatPrice(item.totalCaps)} {isBottle ? t("bottles", "ဘူး") : t("caps", "အဖုံး")}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          @ {formatPrice(item.pricePerCap)} MMK/အဖုံး
+                          @ {formatPrice(item.pricePerCap)} MMK/{isBottle ? t("bottle", "ဘူး") : t("cap", "အဖုံး")}
                         </div>
                       </div>
                       <div className="text-right">
@@ -86,7 +88,8 @@ const OrderReview = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="h-px bg-border my-4" />

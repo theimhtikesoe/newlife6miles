@@ -11,6 +11,7 @@ export interface CartItem {
   totalCaps: number;
   totalPrice: number;
   productImage?: string;
+  unitType?: "bottle" | "cap";
 }
 
 export interface CustomerInfo {
