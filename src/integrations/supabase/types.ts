@@ -265,6 +265,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      submit_public_order: {
+        Args: {
+          p_customer_city: string
+          p_customer_name: string
+          p_customer_notes?: string | null
+          p_customer_phone: string
+          p_items: Json
+          p_total_amount: number
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "user"

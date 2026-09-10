@@ -37,27 +37,7 @@ const OrderConfirm = () => {
     setIsSubmitting(true);
 
     try {
-      // Create order
-      const { data: orderData, error: orderError } = await supabase
-        .from("orders")
-        .insert({
-          customer_name: customerInfo.name,
-          customer_phone: customerInfo.phone,
-          customer_city: customerInfo.city,
-          customer_notes: customerInfo.notes || null,
-          total_amount: getGrandTotal(),
-          status: "pending",
-        })
-        .select()
-        .single();
-
-      if (orderError) {
-        throw orderError;
-      }
-
-      // Create order items
       const orderItems = items.map((item) => ({
-        order_id: orderData.id,
         product_id: item.productId,
         product_name: item.productName,
         price_per_cap: item.pricePerCap,
@@ -67,16 +47,31 @@ const OrderConfirm = () => {
         total_price: item.totalPrice,
       }));
 
-      const { error: itemsError } = await supabase
-        .from("order_items")
-        .insert(orderItems);
+      // Submit customer + order items atomically. This avoids the previous
+      // orders.insert().select() RLS failure and prevents orphan orders.
+      const { data: orderId, error: orderError } = await supabase.rpc(
+        "submit_public_order",
+        {
+          p_customer_name: customerInfo.name,
+          p_customer_phone: customerInfo.phone,
+          p_customer_city: customerInfo.city,
+          p_customer_notes: customerInfo.notes || null,
+          p_total_amount: getGrandTotal(),
+          p_items: orderItems,
+        }
+      );
 
-      if (itemsError) {
-        throw itemsError;
+      if (orderError || !orderId) {
+        const message = orderError?.message || "Order submission returned no reference.";
+        throw new Error(message);
+      }
+
+      if (typeof orderId !== "string") {
+        throw new Error("Order submission returned an invalid reference.");
       }
 
       // Success
-      window.localStorage.setItem("new-life-last-order-id", orderData.id);
+      window.localStorage.setItem("new-life-last-order-id", orderId);
       clearCart();
       navigate("/order-success");
     } catch (error) {
